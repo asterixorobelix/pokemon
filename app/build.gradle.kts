@@ -48,7 +48,9 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.gson)
     implementation(libs.koin)
+    implementation(libs.koinAndroid)
     implementation(libs.retrofit)
+    implementation(libs.gsonConverter)
 
     testImplementation(libs.junit)
 
