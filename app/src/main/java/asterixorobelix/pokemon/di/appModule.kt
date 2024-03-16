@@ -1,6 +1,7 @@
 package asterixorobelix.pokemon.di
 
 import asterixorobelix.pokemon.FirstFragmentViewModel
+import asterixorobelix.pokemon.SecondFragmentViewModel
 import asterixorobelix.pokemon.network.PokemonService
 import asterixorobelix.pokemon.repository.PokemonRepository
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -18,4 +19,5 @@ val appModule = module {
     }
     single { PokemonRepository(get()) }
     viewModel { FirstFragmentViewModel(get()) }
+    viewModel { SecondFragmentViewModel(get()) }
 }

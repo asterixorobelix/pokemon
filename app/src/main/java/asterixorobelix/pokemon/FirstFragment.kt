@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -26,12 +25,9 @@ import androidx.compose.ui.unit.sp
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.Navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import asterixorobelix.pokemon.SecondFragment.Companion.INDEX_KEY
 import asterixorobelix.pokemon.databinding.FragmentFirstBinding
-import asterixorobelix.pokemon.models.Pokemon
 import asterixorobelix.pokemon.models.Results
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -45,7 +41,7 @@ class FirstFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    private val detailViewModel: FirstFragmentViewModel by viewModel()
+    private val firstFragmentViewModel: FirstFragmentViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,11 +49,11 @@ class FirstFragment : Fragment() {
     ): View {
 
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
-        detailViewModel.viewModelScope.launch {
+        firstFragmentViewModel.viewModelScope.launch {
             _binding?.composeView?.setContent {
                 PokemonLazyVerticalGrid(
                     binding.root,
-                    detailViewModel.uiState.collectAsState(initial = listOf())
+                    firstFragmentViewModel.uiState.collectAsState(initial = listOf())
                 )
             }
         }
