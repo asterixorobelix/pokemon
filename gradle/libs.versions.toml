@@ -14,6 +14,7 @@ gsonVersion = "2.10.1"
 retrofitVersion = "2.9.0"
 koinVersion = "3.5.3"
 androidxComposeBomVersion = "2024.02.02"
+coilComposeVersion = "2.6.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -31,6 +32,7 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 koin = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koinVersion" }
 koinAndroid = { group = "io.insert-koin", name = "koin-android", version.ref = "koinVersion" }
 androidxComposeBom = { group = "androidx.compose", name="compose-bom", version.ref = "androidxComposeBomVersion" }
+coil = {group ="io.coil-kt", name = "coil-compose", version.ref = "coilComposeVersion"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

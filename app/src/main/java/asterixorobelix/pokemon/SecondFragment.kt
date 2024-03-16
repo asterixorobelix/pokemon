@@ -26,6 +26,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import asterixorobelix.pokemon.databinding.FragmentSecondBinding
 import asterixorobelix.pokemon.models.detail.PokemonDetail
+import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -91,6 +92,10 @@ fun PokemonDetailUI(pokemonDetail: State<PokemonDetail>) {
             color = Color(0xFFFFFFFF),
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(8.dp)
+        )
+        AsyncImage(
+            model = pokemonDetail.value.sprites?.frontDefault,
+            contentDescription = pokemonDetail.value.name
         )
     }
 }
