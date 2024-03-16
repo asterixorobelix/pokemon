@@ -1,6 +1,6 @@
 [versions]
 agp = "8.3.0"
-kotlin = "1.9.0"
+kotlin = "1.9.22"
 coreKtx = "1.12.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -13,6 +13,7 @@ navigationUiKtx = "2.7.7"
 gsonVersion = "2.10.1"
 retrofitVersion = "2.9.0"
 koinVersion = "3.5.3"
+androidxComposeBomVersion = "2024.02.02"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -29,6 +30,7 @@ gsonConverter = { group = "com.squareup.retrofit2", name = "converter-gson", ver
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofitVersion" }
 koin = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koinVersion" }
 koinAndroid = { group = "io.insert-koin", name = "koin-android", version.ref = "koinVersion" }
+androidxComposeBom = { group = "androidx.compose", name="compose-bom", version.ref = "androidxComposeBomVersion" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

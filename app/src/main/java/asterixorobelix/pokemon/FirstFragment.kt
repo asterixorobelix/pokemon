@@ -5,6 +5,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardElevation
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import asterixorobelix.pokemon.databinding.FragmentFirstBinding
@@ -33,6 +48,9 @@ class FirstFragment : Fragment() {
         detailViewModel.viewModelScope.launch {
             detailViewModel.getPokemon()
         }
+        _binding?.composeView?.setContent {
+            PokemonLazyVerticalGrid()
+        }
         return binding.root
 
     }
@@ -40,13 +58,48 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-        }
+//        binding.buttonFirst.setOnClickListener {
+//            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+//        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+}
+
+@Composable
+fun PokemonLazyVerticalGrid(){
+    val list = (1..10).map { it.toString() }
+
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(128.dp),
+
+        // content padding
+        contentPadding = PaddingValues(
+            start = 12.dp,
+            top = 16.dp,
+            end = 12.dp,
+            bottom = 16.dp
+        ),
+        content = {
+            items(list.size) { index ->
+                Card(
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .fillMaxWidth(),
+                ) {
+                    Text(
+                        text = list[index],
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 30.sp,
+                        color = Color(0xFFFFFFFF),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
+            }
+        }
+    )
 }
