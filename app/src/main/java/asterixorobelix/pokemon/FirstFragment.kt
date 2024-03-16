@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import asterixorobelix.pokemon.databinding.FragmentFirstBinding
 import kotlinx.coroutines.Dispatchers
@@ -49,18 +51,10 @@ class FirstFragment : Fragment() {
             detailViewModel.getPokemon()
         }
         _binding?.composeView?.setContent {
-            PokemonLazyVerticalGrid()
+            PokemonLazyVerticalGrid(binding.root)
         }
         return binding.root
 
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-//        binding.buttonFirst.setOnClickListener {
-//            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-//        }
     }
 
     override fun onDestroyView() {
@@ -70,12 +64,14 @@ class FirstFragment : Fragment() {
 }
 
 @Composable
-fun PokemonLazyVerticalGrid(){
+fun PokemonLazyVerticalGrid(view: View) {
     val list = (1..10).map { it.toString() }
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(128.dp),
-
+        Modifier.clickable {
+            findNavController(view).navigate(R.id.action_FirstFragment_to_SecondFragment)
+        },
         // content padding
         contentPadding = PaddingValues(
             start = 12.dp,
