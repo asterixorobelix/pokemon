@@ -15,16 +15,22 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.bundleOf
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import asterixorobelix.pokemon.SecondFragment.Companion.INDEX_KEY
 import asterixorobelix.pokemon.databinding.FragmentFirstBinding
+import asterixorobelix.pokemon.models.Pokemon
+import asterixorobelix.pokemon.models.Results
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -48,11 +54,14 @@ class FirstFragment : Fragment() {
 
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         detailViewModel.viewModelScope.launch {
-            detailViewModel.getPokemon()
+            _binding?.composeView?.setContent {
+                PokemonLazyVerticalGrid(
+                    binding.root,
+                    detailViewModel.uiState.collectAsState(initial = listOf())
+                )
+            }
         }
-        _binding?.composeView?.setContent {
-            PokemonLazyVerticalGrid(binding.root)
-        }
+
         return binding.root
 
     }
@@ -64,14 +73,10 @@ class FirstFragment : Fragment() {
 }
 
 @Composable
-fun PokemonLazyVerticalGrid(view: View) {
-    val list = (1..10).map { it.toString() }
+fun PokemonLazyVerticalGrid(view: View, pokemon: State<List<Results>>) {
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(128.dp),
-        Modifier.clickable {
-            findNavController(view).navigate(R.id.action_FirstFragment_to_SecondFragment)
-        },
         // content padding
         contentPadding = PaddingValues(
             start = 12.dp,
@@ -80,19 +85,26 @@ fun PokemonLazyVerticalGrid(view: View) {
             bottom = 16.dp
         ),
         content = {
-            items(list.size) { index ->
+            items(pokemon.value.size) { index ->
                 Card(
                     modifier = Modifier
                         .padding(4.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .clickable {
+                            val bundle = bundleOf(INDEX_KEY to index)
+                            findNavController(view).navigate(
+                                R.id.action_FirstFragment_to_SecondFragment,
+                                bundle
+                            )
+                        },
                 ) {
                     Text(
-                        text = list[index],
+                        text = pokemon.value[index].name ?: "",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 30.sp,
+                        fontSize = 20.sp,
                         color = Color(0xFFFFFFFF),
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(16.dp)
+                        modifier = Modifier.padding(8.dp)
                     )
                 }
             }
