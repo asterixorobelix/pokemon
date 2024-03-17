@@ -6,15 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarColors
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -33,6 +42,7 @@ import asterixorobelix.pokemon.SecondFragment.Companion.INDEX_KEY
 import asterixorobelix.pokemon.databinding.FragmentFirstBinding
 import asterixorobelix.pokemon.models.Results
 import coil.compose.SubcomposeAsyncImage
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -48,6 +58,7 @@ class FirstFragment : Fragment() {
     private val binding get() = _binding!!
     private val firstFragmentViewModel: FirstFragmentViewModel by viewModel()
 
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,13 +67,43 @@ class FirstFragment : Fragment() {
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         firstFragmentViewModel.viewModelScope.launch {
             _binding?.composeView?.setContent {
-                PokemonLazyVerticalGrid(
-                    binding.root,
-                    firstFragmentViewModel.uiState.collectAsState(initial = listOf())
-                )
+                val searchText = firstFragmentViewModel.searchText.collectAsState()
+                Column {
+                    SearchBar(
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = "search icon"
+                            )
+                        },
+                        trailingIcon = {
+
+                        },
+                        query = searchText.value,
+                        placeholder = { Text(text = SEARCH_BY_NAME_TEXT) },
+                        onQueryChange = {
+                            firstFragmentViewModel.viewModelScope.launch {
+                              firstFragmentViewModel.searchPokemonByName(it)
+                            }
+                        },
+                        onSearch = {},
+                        active = searchText.value.isNotEmpty(),
+                        onActiveChange = {},
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(100.dp)
+                    ) {
+
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
+                    PokemonLazyVerticalGrid(
+                        binding.root,
+                        firstFragmentViewModel.uiState.collectAsState(initial = listOf())
+                    )
+                }
+
             }
         }
-
         return binding.root
 
     }
@@ -70,6 +111,10 @@ class FirstFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        const val SEARCH_BY_NAME_TEXT = "Search by pokemon name"
     }
 }
 
@@ -86,6 +131,7 @@ fun PokemonLazyVerticalGrid(view: View, pokemon: State<List<Results>>) {
             bottom = 16.dp
         ),
         content = {
+
             items(pokemon.value.size) { index ->
                 Card(
                     modifier = Modifier
