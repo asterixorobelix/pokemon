@@ -10,16 +10,23 @@
         android:name="asterixorobelix.pokemon.FirstFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first">
-
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            app:destination="@id/SecondFragment" >
+            <argument
+                android:name="index"
+                android:defaultValue="1" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
         android:name="asterixorobelix.pokemon.SecondFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
+        <argument
+            android:name="index"
+            app:argType="integer"
+            android:defaultValue="1" />
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
