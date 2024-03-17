@@ -15,8 +15,6 @@ class SecondFragmentViewModel(private val pokemonRepository: PokemonRepository) 
      * @param pokemonListIndex index of the item selected by the user
      */
     fun obtainPokemonDetail(pokemonListIndex: Int?): Flow<PokemonDetail> {
-        //index retrieved from the list starts at 0, but api is not zero indexed
-        val apiIndex = (pokemonListIndex ?: 0) + 1
-        return flow { emit(pokemonRepository.obtainPokemonById(apiIndex)) }
+        return flow { emit(pokemonRepository.obtainPokemonById(getAPIIndex(pokemonListIndex))) }
     }
 }

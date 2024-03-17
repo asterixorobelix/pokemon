@@ -7,17 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -28,6 +32,7 @@ import androidx.navigation.Navigation.findNavController
 import asterixorobelix.pokemon.SecondFragment.Companion.INDEX_KEY
 import asterixorobelix.pokemon.databinding.FragmentFirstBinding
 import asterixorobelix.pokemon.models.Results
+import coil.compose.SubcomposeAsyncImage
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -102,8 +107,25 @@ fun PokemonLazyVerticalGrid(view: View, pokemon: State<List<Results>>) {
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(8.dp)
                     )
+                    SubcomposeAsyncImage(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(100.dp),
+                        loading = { CircularProgressIndicator(modifier = Modifier.fillMaxHeight()) },
+                        model = getPokemonImageUrl(index),
+                        contentDescription = "Pokemon Image",
+                        contentScale = ContentScale.FillHeight
+                    )
                 }
             }
         }
     )
+}
+
+private fun getPokemonImageUrl(pokemonListIndex: Int): String {
+    return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
+        getAPIIndex(
+            pokemonListIndex
+        )
+    }.png"
 }
