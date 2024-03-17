@@ -7,21 +7,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import asterixorobelix.pokemon.databinding.FragmentSecondBinding
 import asterixorobelix.pokemon.models.detail.PokemonDetail
-import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -87,9 +90,14 @@ fun PokemonDetailUI(pokemonDetail: State<PokemonDetail>) {
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(8.dp)
         )
-        AsyncImage(
+        SubcomposeAsyncImage(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(100.dp),
+            loading = { CircularProgressIndicator(modifier = Modifier.fillMaxHeight()) },
             model = pokemonDetail.value.sprites?.frontDefault,
-            contentDescription = pokemonDetail.value.name
+            contentDescription = pokemonDetail.value.name,
+            contentScale = ContentScale.FillHeight
         )
     }
 }
