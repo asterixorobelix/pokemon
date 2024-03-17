@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -58,7 +59,7 @@ class SecondFragment : Fragment() {
         binding.detailLayout.setContent {
             PokemonDetailUI(
                 secondFragmentViewModel.obtainPokemonDetail(pokemonIndex).collectAsState(
-                    initial = PokemonDetail()
+                    initial = PokemonDetail(name = "Loading")
                 )
             )
         }
@@ -88,7 +89,7 @@ fun PokemonDetailUI(pokemonDetail: State<PokemonDetail>) {
             fontSize = 20.sp,
             color = Color(0xFFFFFFFF),
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(8.dp).align(Alignment.CenterHorizontally)
         )
         SubcomposeAsyncImage(
             modifier = Modifier
@@ -98,6 +99,15 @@ fun PokemonDetailUI(pokemonDetail: State<PokemonDetail>) {
             model = pokemonDetail.value.sprites?.frontDefault,
             contentDescription = pokemonDetail.value.name,
             contentScale = ContentScale.FillHeight
+        )
+
+        Text(
+            text = "Base Experience: ${pokemonDetail.value.baseExperience}",
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp,
+            color = Color(0xFFFFFFFF),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(8.dp).align(Alignment.CenterHorizontally)
         )
     }
 }
